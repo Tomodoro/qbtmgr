@@ -1,6 +1,6 @@
 # qBittorrent Management
 
-EARLY RELEASE
+DEV RELEASE
 Program to manage multiple torrents at once in qBittorrent.
 
 ## Installation
