@@ -1,11 +1,7 @@
 # qBittorrent Management
 
-<<<<<<< HEAD
-DEV RELEASE
-=======
 EARLY RELEASE
 
->>>>>>> main
 Program to manage multiple torrents at once in qBittorrent.
 
 ## Installation
