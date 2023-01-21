@@ -1,6 +1,11 @@
 # qBittorrent Management
 
+<<<<<<< HEAD
 DEV RELEASE
+=======
+EARLY RELEASE
+
+>>>>>>> main
 Program to manage multiple torrents at once in qBittorrent.
 
 ## Installation
@@ -32,32 +37,63 @@ Subcommands also contain help:
 $ qbtmgr auth -h
 ```
 
-## Authentification
+## Configuration
 
+Configuration file `qbtmgr.ini` can be found at:
 
+**Windows:**
+```
+$ Set-Location -Path $env:appdata/qbtmgr
+```
+
+**Linux:**
+```
+$ cd ${HOME}/.qbtmgr
+```
+XDG Base directory will be supported in the future.
+
+**Darwin:**
+
+I don't own an Apple device, I can't test it.
+
+### Credentials
+
+You can set them directly inside `qbtmgr.ini` or via command line:
+```
+$ qbtmgr.py auth -h
+```
 
 ## Seeding
 
-It provides two methods of operation: tag-based management and category-based management.
-
-The main goal is to make use of already existent methods of organization of torrents and only provide the automatization process to trigger changes.
+It provides two methods of operation:
+* **Tier:** tag-based management
+* **Rank:** category-based management
 
 ### Tier
 
-This is a tag-based management that classifies torrents on 10 fixed groups or tiers, each one having a defined ratio and bandwidth limit.
+Main features:
+* Only uses tags, but requires to run the program periodically
+* Torrents are classified on 10 fixed groups or tiers
+* Ratio limit is mandatory to keep control of the bandwidth
+* Torrents with ratio out of range are ignored
+* Default bandwidth allowed per torrent is 500KiB/s
 
-This type of management requires the program to be run on a periodic schedule, this way it can renew the torrent's group once it's ratio limit has been reached. A ratio limit is required for this type of approach since it strictly forbids any torrent to use more bandwidth than it's desired at the expense of pausing it.
+Presets are provided to ease management:
 
-This answers a specific use case, torrents that are desired to seed but that clog the available bandwidth. Presets or stepstyles have been made in order to ease the configuration:
-
-**lineal** (Default)
-Increases on a fixed step (default is 5). Throttles bandwidth on a steady pace.
+**lineal** (Deafault)
+* Increases ratio limit by a fixed step (default is 5)
+* Throttles bandwidth by a constant step (default is 50KiB/s)
 
 **fibonacci**
-As the title says (by default it starts at 5). Seeds for more time before start throttling too much the bandwidth.
+* Increases ratio limit following fibonacci's sequence
+* It can be set to which sequence's term to start (default is 5th)
+* Throttles bandwidth by a constant step (default is 50KiB/s)
 
 **tribonacci**
-This is an extension of Fibonacci's. Here tier 0 is ratio 13 and tier 9 is ratio 3136, it takes a lot heck of a time to throttle fully.
+* Increases ratio limit following a faster fibonacci's sequence
+* It can be set to which sequence's term to start (default is 8th)
+* Throttles bandwidth by a constant step (default is 50KiB/s)
+* It grows... fast
 
 #### Usage examples
 
@@ -71,7 +107,7 @@ To stop managing the torrents run:
 $ qbtmgr tier --unset
 ```
 
-Managed torrents are paused once they reach their ratio limit, it requiers to steps to resume them:
+Managed torrents are paused once they reach their ratio limit, it requiers two steps to resume them:
 ```
 # Update the tiers
 $ qbtmgr tier --set
@@ -86,6 +122,8 @@ $ qbtmgr tier --automatize
 ```
 
 ### Rank
+
+Coming soon...
 
 This is a category-based management that classifies all torrents inside a directory or folder, each one having its own ratio, bandwidth and seedtime limit.
 
@@ -102,5 +140,3 @@ API returns  : "Music/Chillhop"
 ```
 
 This program will consider `Music` and `Music/Chillhop` as two different categories.
-
-Coming soon...
