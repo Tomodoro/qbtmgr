@@ -37,18 +37,18 @@ $ qbtmgr auth -h
 
 Configuration file `qbtmgr.ini` can be found at:
 
-Windows:
+**Windows:**
 ```
 $ Set-Location -Path $env:appdata/qbtmgr
 ```
 
-Linux:
+**Linux:**
 ```
 $ cd ${HOME}/.qbtmgr
 ```
 XDG Base directory will be supported in the future.
 
-Darwin:
+**Darwin:**
 
 I don't own an Apple device, I can't test it.
 
