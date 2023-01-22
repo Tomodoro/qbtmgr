@@ -8,22 +8,22 @@ def tier(args):
     if args.set:
         set_tiers(args)
 
-    if args.resume:
-        resume_tiers(args)
-
-    if args.unset:
+    elif args.unset:
         unset_tiers(args)
+
+    elif args.resume:
+        resume_tiers(args)
 
 
 def set_tiers(args):
 
     client = get_auth()
-    cfg    = get_cfg()
-    var_stepstyle = cfg["tier"]["stepstyle"]
-    var_ratio     = cfg["tier"]["step"]
 
     logging.debug("Reading configurations from qBittorrent")
     var_bandwidth = client.transfer_upload_limit()
+
+    logging.debug("Reading flags")
+    var_stepstyle = args.stepstyle
 
     if var_bandwidth == 0:
         logging.info("Global Bandwidth is unlimited, locking at 500KiB/s")
@@ -34,10 +34,6 @@ def set_tiers(args):
         var_bandwidth = var_bandwidth/2
 
     var_throttle = var_bandwidth/10
-
-    logging.debug("Reading tier settings from flags")
-    if args.stepstyle is not None: var_stepstyle = args.stepstyle
-    if args.r         is not None: var_ratio     = args.r
 
     logging.debug("Creating tier array")
     all_tiers = [None] * 10
@@ -51,20 +47,26 @@ def set_tiers(args):
         logging.debug("Tier "+str(i)+" has bandwidth "+str(tier_bandwidth))
 
         if var_stepstyle == "lineal":
+            var_ratio = 5
             if i != 0:
-                tier_ratio  = int(var_ratio) + int(var_ratio)*int(i)
+                tier_ratio  = var_ratio + var_ratio*i
             else:
-                tier_ratio  = int(var_ratio)
+                tier_ratio  = var_ratio
+
+        elif var_stepstyle == "quadratic":
+            var_ratio = 2
+            if i != 0:
+                tier_ratio  = var_ratio**i
+            else:
+                tier_ratio  = 1
 
         elif var_stepstyle == "fibonacci":
-            tier_ratio = Fibonacci(int(var_ratio)+i)
+            var_ratio = 5
+            tier_ratio = Fibonacci(var_ratio+i)
 
         elif var_stepstyle == "tribonacci":
-            tier_ratio = Tribonacci(int(var_ratio)+3+i)
-
-        else:
-            logging.debug("Unknown ratio, defaulting to lineal")
-            tier_ratio  = int(var_ratio) + int(var_ratio)*int(i)
+            var_ratio = 8
+            tier_ratio = Tribonacci(var_ratio+i)
 
         tier_tag = "@tier "+str(i)
 
@@ -101,8 +103,9 @@ def set_tiers(args):
         # Set Tier 0
         if ratio < all_tiers[0]["ratio_limit"]:
             client.torrents_add_tags(all_tiers[0]["tag"], hash)
-            client.torrents_set_share_limits(all_tiers[0]["ratio_limit"], var_-2, hash)
+            client.torrents_set_share_limits(all_tiers[0]["ratio_limit"], -2, hash)
             client.torrents_set_upload_limit(all_tiers[0]["bandwidth"], hash)
+            if args.resume: client.torrents_resume(hash)
             continue
 
         # Set Tier [1-9]
@@ -113,6 +116,8 @@ def set_tiers(args):
                 client.torrents_add_tags(all_tiers[i]["tag"], hash)
                 client.torrents_set_share_limits(all_tiers[i]["ratio_limit"], -2, hash)
                 client.torrents_set_upload_limit(all_tiers[i]["bandwidth"], hash)
+                
+        if args.resume: client.torrents_resume(hash)
 
 def unset_tiers(args):
     logging.debug("Removing tiers")

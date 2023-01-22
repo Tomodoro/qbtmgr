@@ -9,11 +9,6 @@ def write_default_cfgfile(file):
                      "bypass": "off",
                      "username": "admin",
                      "password": "adminadmin"}
-    cfg["tier"] = {"bandwidth": "512000",
-                    "throttle": "51200",
-                    "stepstyle": "lineal",
-                    "step": 5,
-                    "seedtime": -2}
 
     with open(file, 'w') as cfgfile:
         cfg.write(cfgfile)

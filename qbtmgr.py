@@ -69,14 +69,9 @@ parser_tier.add_argument("--resume",
                          action="store_true",
                          help="resume paused tier-tagged torrents")
 parser_tier.add_argument("--stepstyle",
-                         choices=["lineal","fibonacci","tribonacci"],
-                         default=None,
+                         choices=["lineal", "quadratic", "fibonacci","tribonacci"],
+                         default="lineal",
                          help="set how the ratio increases between tiers")
-parser_tier.add_argument("-r",
-                         metavar="STEPS",
-                         default=None,
-                         type=int,
-                         help="set ratio step or nth number of *ibonacci to start")
 parser_tier.set_defaults(func=tier)
 
 # Parser for rank subcommand
