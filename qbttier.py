@@ -5,15 +5,11 @@ from qbtinit import get_cfg
 
 def tier(args):
 
-    if args.automatize:
+    if args.set:
         set_tiers(args)
-        resume_tiers(args)
 
     if args.resume:
         resume_tiers(args)
-
-    if args.set:
-        set_tiers(args)
 
     if args.unset:
         unset_tiers(args)

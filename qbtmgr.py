@@ -68,12 +68,9 @@ exclusive0_tier.add_argument("--unset",
 exclusive0_tier.add_argument("--save",
                          action="store_true",
                          help="save new given parameters")
-exclusive0_tier.add_argument("--resume",
+parser_tier.add_argument("--resume",
                          action="store_true",
                          help="resume paused tier-tagged torrents")
-exclusive0_tier.add_argument("--automatize",
-                         action="store_true",
-                          help="runs both --set and --resume")
 parser_tier.add_argument("--stepstyle",
                          choices=["lineal","fibonacci","tribonacci"],
                          default=None,
