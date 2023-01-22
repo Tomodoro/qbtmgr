@@ -23,28 +23,38 @@ def set_tiers(args):
 
     client = get_auth()
     cfg    = get_cfg()
-    var_bandwidth = cfg["tier"]["bandwidth"]
-    var_throttle  = cfg["tier"]["throttle"]
     var_stepstyle = cfg["tier"]["stepstyle"]
     var_ratio     = cfg["tier"]["step"]
     var_seedtime  = cfg["tier"]["seedtime"]
 
+    logging.debug("Reading configurations from qBittorrent")
+    var_bandwidth = client.transfer_upload_limit()
+
+    if var_bandwidth == 0:
+        logging.info("Global Bandwidth is unlimited, locking at 500KiB/s")
+        var_bandwidth = 512000
+
+    else:
+        logging.info("Setting bandwidth to half the Global bandwidth")
+        var_bandwidth = var_bandwidth/2
+
+    var_throttle = var_bandwidth/10
+
     logging.debug("Reading tier settings from flags")
-    if args.bandwidth is not None: var_bandwidth = args.bandwidth
-    if args.throttle  is not None: var_throttle  = args.throttle
     if args.stepstyle is not None: var_stepstyle = args.stepstyle
     if args.r         is not None: var_ratio     = args.r
     if args.seedtime  is not None: var_seedtime  = args.seedtime
-
-    if int(var_bandwidth) < 0:
-        var_bandwidth = 512000
 
     logging.debug("Creating tier array")
     all_tiers = [None] * 10
     for i in range(0,10):
 
         tier_bandwidth = int(var_bandwidth) - int(var_throttle)*int(i)
-        if tier_bandwidth <= 0: tier_bandwidth = 51200
+        if tier_bandwidth < 51199:
+            logging.warning("Bandwidth too low for Tier "+str(i)+", locking at 50KiB/s")
+            tier_bandwidth = 51200
+
+        logging.debug("Tier "+str(i)+" has bandwidth "+str(tier_bandwidth))
 
         if var_stepstyle == "lineal":
             if i != 0:

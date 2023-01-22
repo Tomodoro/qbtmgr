@@ -74,16 +74,6 @@ exclusive0_tier.add_argument("--resume",
 exclusive0_tier.add_argument("--automatize",
                          action="store_true",
                           help="runs both --set and --resume")
-parser_tier.add_argument("--bandwidth",
-                         metavar="BYTES",
-                         default=None,
-                         type=int,
-                         help="maximum bandwidth dedicated to the tiers")
-parser_tier.add_argument("--throttle",
-                         metavar="BYTES",
-                         default=None,
-                         type=int,
-                         help="number of steps the tier throttle increases")
 parser_tier.add_argument("--stepstyle",
                          choices=["lineal","fibonacci","tribonacci"],
                          default=None,
