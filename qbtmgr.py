@@ -17,6 +17,8 @@ parser = argparse.ArgumentParser(prog="qbtmgr",
                                  description="qBittorrent Management",
                                  epilog="Configurations must follow the API Reference from qittorrent-api")
 subparsers = parser.add_subparsers(title="subcommands")
+parser.add_argument("--debug",
+                    action="store_true")
 
 # Parset for auth subcommand
 parser_auth = subparsers.add_parser("auth",
