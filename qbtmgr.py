@@ -65,9 +65,6 @@ exclusive0_tier.add_argument("--set",
 exclusive0_tier.add_argument("--unset",
                          action="store_true",
                          help="remove tier tags and set global values")
-exclusive0_tier.add_argument("--save",
-                         action="store_true",
-                         help="save new given parameters")
 parser_tier.add_argument("--resume",
                          action="store_true",
                          help="resume paused tier-tagged torrents")
