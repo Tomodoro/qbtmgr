@@ -61,35 +61,6 @@ def get_cfg():
 
     return cfg
 
-def edit_cfg(action, data):
-
-    cfg = get_cfg()
-    if action == "remove_section":
-        """template
-        data = section1
-        """
-        cfg.delete_section(data)
-
-    elif action == "remove_option":
-        """template
-            data = (section, option)
-        """
-        cfg.remove_option(data[0], data[1])
-
-    elif action == "update_from_flag":
-        """template
-        data = [ {
-                   "section": "name",
-                   "option" : "name",
-               "value"  : "name" 
-             } ]
-        """
-        section = data["section"]
-        option  = data["option"]
-        value   = option["value"]
-        if value is not None:
-            cfg[section][option] = value
-
 def init(args):
     status = check_cfgfile()
 
