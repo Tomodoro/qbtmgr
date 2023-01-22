@@ -65,6 +65,10 @@ exclusive0_tier.add_argument("--set",
 exclusive0_tier.add_argument("--unset",
                          action="store_true",
                          help="remove tier tags and set global values")
+exclusive0_tier.add_argument("-l",
+                            nargs='*',
+                            choices=["set-tiers", "tier-active", "not-popular"],
+                            help="legacy mode from qbitseedmgr")
 parser_tier.add_argument("--resume",
                          action="store_true",
                          help="resume paused tier-tagged torrents")

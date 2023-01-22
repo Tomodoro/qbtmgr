@@ -1,11 +1,16 @@
 import qbittorrentapi as qbtapi
 import re, sys, logging, configparser
 from qbtauth import get_auth
-from qbtinit import get_cfg
+from qbtinit import get_cfg, get_legacy_cfg
+import qbttier_legacy
 
 def tier(args):
 
-    if args.set:
+    if args.l is not None:
+        logging.info("Working on legacy mode")
+        tier_legacy(args)
+
+    elif args.set:
         set_tiers(args)
 
     elif args.unset:
@@ -116,7 +121,7 @@ def set_tiers(args):
                 client.torrents_add_tags(all_tiers[i]["tag"], hash)
                 client.torrents_set_share_limits(all_tiers[i]["ratio_limit"], -2, hash)
                 client.torrents_set_upload_limit(all_tiers[i]["bandwidth"], hash)
-                
+
         if args.resume: client.torrents_resume(hash)
 
 def unset_tiers(args):
@@ -157,6 +162,29 @@ def resume_tiers(args):
 
         else:
             client.torrents_resume(hash)
+
+def tier_legacy(args):
+
+    if len(args.l) == 0:
+        qbttier_legacy.help()
+        sys.exit()
+
+    else:
+        config = get_legacy_cfg()
+        client = qbtapi.Client(host=config["Client"]["host"], port=int(config["Client"]["port"]))
+
+    qbttier_legacy.log_in(config, client)
+
+    for i in range(len(args.l)):
+        
+        if args.l[i] == "set-tiers":
+            qbttier_legacy.set_tiers(config, client)
+
+        if args.l[i] == "not-popular":
+            qbttier_legacy.not_popular(config, client)
+
+        if args.l[i] == "tier-active":
+            qbttier_legacy.tier_active(config, client)
 
 # https://www.geeksforgeeks.org/python-program-for-program-for-fibonacci-numbers-2/
 # Function for nth Fibonacci number
