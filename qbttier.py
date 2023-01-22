@@ -53,10 +53,10 @@ def set_tiers(args):
                 tier_ratio  = int(var_ratio)
 
         elif var_stepstyle == "fibonacci":
-            tier_ratio = Fibonacci(var_ratio+i)
+            tier_ratio = Fibonacci(int(var_ratio)+i)
 
         elif var_stepstyle == "tribonacci":
-            tier_ratio = Tribonacci(var_ratio+3+i)
+            tier_ratio = Tribonacci(int(var_ratio)+3+i)
 
         else:
             logging.debug("Unknown ratio, defaulting to lineal")
