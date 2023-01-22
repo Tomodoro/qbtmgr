@@ -25,7 +25,6 @@ def set_tiers(args):
     cfg    = get_cfg()
     var_stepstyle = cfg["tier"]["stepstyle"]
     var_ratio     = cfg["tier"]["step"]
-    var_seedtime  = cfg["tier"]["seedtime"]
 
     logging.debug("Reading configurations from qBittorrent")
     var_bandwidth = client.transfer_upload_limit()
@@ -43,7 +42,6 @@ def set_tiers(args):
     logging.debug("Reading tier settings from flags")
     if args.stepstyle is not None: var_stepstyle = args.stepstyle
     if args.r         is not None: var_ratio     = args.r
-    if args.seedtime  is not None: var_seedtime  = args.seedtime
 
     logging.debug("Creating tier array")
     all_tiers = [None] * 10
@@ -107,7 +105,7 @@ def set_tiers(args):
         # Set Tier 0
         if ratio < all_tiers[0]["ratio_limit"]:
             client.torrents_add_tags(all_tiers[0]["tag"], hash)
-            client.torrents_set_share_limits(all_tiers[0]["ratio_limit"], var_seedtime, hash)
+            client.torrents_set_share_limits(all_tiers[0]["ratio_limit"], var_-2, hash)
             client.torrents_set_upload_limit(all_tiers[0]["bandwidth"], hash)
             continue
 
@@ -117,7 +115,7 @@ def set_tiers(args):
             and (ratio < all_tiers[i]["ratio_limit"]):
                 client.torrents_remove_tags(all_tiers[i-1]["tag"], hash)
                 client.torrents_add_tags(all_tiers[i]["tag"], hash)
-                client.torrents_set_share_limits(all_tiers[i]["ratio_limit"], var_seedtime, hash)
+                client.torrents_set_share_limits(all_tiers[i]["ratio_limit"], -2, hash)
                 client.torrents_set_upload_limit(all_tiers[i]["bandwidth"], hash)
 
 def unset_tiers(args):

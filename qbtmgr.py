@@ -83,11 +83,6 @@ parser_tier.add_argument("-r",
                          default=None,
                          type=int,
                          help="set ratio step or nth number of *ibonacci to start")
-parser_tier.add_argument("--seedtime",
-                         metavar="MINUTES",
-                         default=None,
-                         type=int,
-                         help="number of minutes the tiers can seed before halting")
 parser_tier.set_defaults(func=tier)
 
 # Parser for rank subcommand
